@@ -5,35 +5,32 @@ load("//tools/rules:workspace.bzl", "new_patched_local_repository")
 
 http_archive(
     name = "rules_cc",
-    patches = [
-        "//:tools/rules_cc/cuda_support.patch",
-    ],
-    strip_prefix = "rules_cc-40548a2974f1aea06215272d9c2b47a14a24e556",
+    strip_prefix = "rules_cc-0.1.5",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/rules_cc/archive/40548a2974f1aea06215272d9c2b47a14a24e556.tar.gz",
-        "https://github.com/bazelbuild/rules_cc/archive/40548a2974f1aea06215272d9c2b47a14a24e556.tar.gz",
+        "https://github.com/bazelbuild/rules_cc/releases/download/0.1.5/rules_cc-0.1.5.tar.gz",
     ],
 )
-
 http_archive(
     name = "rules_cuda",
-    strip_prefix = "runtime-b1c7cce21ba4661c17ac72421c6a0e2015e7bef3/third_party/rules_cuda",
-    urls = ["https://github.com/tensorflow/runtime/archive/b1c7cce21ba4661c17ac72421c6a0e2015e7bef3.tar.gz"],
+    sha256 = "fe8d3d8ed52b9b433f89021b03e3c428a82e10ed90c72808cc4988d1f4b9d1b3",
+    strip_prefix = "rules_cuda-v0.2.5",
+    urls = ["https://github.com/bazel-contrib/rules_cuda/releases/download/v0.2.5/rules_cuda-v0.2.5.tar.gz"],
 )
 
 http_archive(
     name = "platforms",
     urls = [
-        "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.10/platforms-0.0.10.tar.gz",
-        # TODO Fix bazel linter to support hashes for release tarballs.
-        # "https://github.com/bazelbuild/platforms/releases/download/0.0.10/platforms-0.0.10.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/platforms/releases/download/0.0.9/platforms-0.0.9.tar.gz",
+        "https://github.com/bazelbuild/platforms/releases/download/0.0.9/platforms-0.0.9.tar.gz",
     ],
-    # sha256 = "218efe8ee736d26a3572663b374a253c012b716d8af0c07e842e82f238a0a7ee",
+    sha256 = "5eda539c841265031c2f82d8ae7a3a6490bd62176e0c038fc469eabf91f6149b",
 )
 
-load("@rules_cuda//cuda:dependencies.bzl", "rules_cuda_dependencies")
+load("@rules_cuda//cuda:repositories.bzl", "register_detected_cuda_toolchains", "rules_cuda_dependencies")
 
-rules_cuda_dependencies(with_rules_cc = False)
+rules_cuda_dependencies()
+
+register_detected_cuda_toolchains()
 
 load("@rules_cc//cc:repositories.bzl", "rules_cc_toolchains")
 
@@ -157,12 +154,6 @@ new_local_repository(
     name = "kineto",
     build_file = "//third_party:kineto.BUILD",
     path = "third_party/kineto",
-)
-
-new_local_repository(
-    name = "opentelemetry-cpp",
-    build_file = "//third_party::opentelemetry-cpp.BUILD",
-    path = "third_party/opentelemetry-cpp",
 )
 
 new_local_repository(

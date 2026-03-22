@@ -5,6 +5,8 @@
 
 #if defined(USE_ROCM)
 #include <hip/hip_runtime_api.h>
+#else
+#include <cuda.h>
 #endif
 
 namespace c10d::symmetric_memory {

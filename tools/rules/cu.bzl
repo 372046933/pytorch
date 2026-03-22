@@ -38,5 +38,23 @@ NVCC_COPTS = [
     "-Wno-missing-field-initializers",
 ]
 
-def cu_library(name, srcs, copts = [], **kwargs):
-    cuda_library(name, srcs = srcs, copts = NVCC_COPTS + copts, **kwargs)
+CLANG_COPTS = [
+    "-std=c++20",
+    "-Wno-error=unknown-pragmas",
+    "-Wno-missing-field-initializers",
+    "-Wno-unused-parameter",
+    "-Wno-error=unused-private-field",
+]
+
+def cu_library(name, srcs, copts = [], includes = [], **kwargs):
+    cuda_library(
+        name = name,
+        srcs = srcs,
+        includes = ["."] + includes,
+        copts = select({
+            "@rules_cuda//cuda:compiler_is_nvcc": NVCC_COPTS,
+            "@rules_cuda//cuda:compiler_is_clang": CLANG_COPTS,
+            "//conditions:default": NVCC_COPTS,
+        }) + copts,
+        **kwargs
+    )
