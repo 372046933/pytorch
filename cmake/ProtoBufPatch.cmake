@@ -21,13 +21,6 @@ if(NOT SYSTEM_PROTOBUF)
     content
     "${content}")
 
-  string(
-    REPLACE
-    "PROTOBUF_CONSTEXPR"
-    ""
-    content
-    "${content}")
-
   # https://github.com/protocolbuffers/protobuf/commit/0400cca3236de1ca303af38bf81eab332d042b7c
   # changes PROTOBUF_CONSTEXPR to constexpr, which breaks windows
   # build.
