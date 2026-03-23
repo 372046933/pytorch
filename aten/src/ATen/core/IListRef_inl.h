@@ -168,7 +168,11 @@ class IListRefTagImpl<IListRefTag::Boxed, at::OptionalTensorRef>
    */
   static IListRefConstRef<at::OptionalTensorRef> iterator_get(
       const typename list_type::const_iterator& it) {
+#if defined(__clang__)
+    C10_DIAGNOSTIC_PUSH_AND_IGNORED_IF_DEFINED("-Wdangling")
+#else
     C10_DIAGNOSTIC_PUSH_AND_IGNORED_IF_DEFINED("-Wdangling-reference")
+#endif
     const auto& ivalue = (*it).get();
     C10_DIAGNOSTIC_POP()
     if (!ivalue.isNone()) {

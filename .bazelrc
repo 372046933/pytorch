@@ -80,6 +80,8 @@ build --per_file_copt='^//.*\.(cpp|cc)$'@-Werror=all
 build --per_file_copt='^//.*\.(cpp|cc)$'@-Wno-error=unknown-pragmas
 
 build --per_file_copt='^//.*\.(cpp|cc)$'@-Werror=extra
+# GCC 13 specific: suppress dangling-reference which is often a false positive in PT
+build --per_file_copt='^//.*\.(cpp|cc)$'@-Wno-error=dangling-reference
 # The following warnings come from -Wextra. We downgrade them from error
 # to warnings here.
 #

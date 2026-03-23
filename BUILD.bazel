@@ -29,8 +29,10 @@ COMMON_COPTS = [
     "-DAT_PER_OPERATOR_HEADERS",
     "-DATEN_THREADING=NATIVE",
     "-DNO_CUDNN_DESTROY_HANDLE",
-    "-Wno-error=unused-private-field",
-] + if_cuda([
+] + select({
+    "@rules_cuda//cuda:compiler_is_clang": ["-Wno-error=unused-private-field"],
+    "//conditions:default": ["-Wno-error=dangling-reference"],
+}) + if_cuda([
     "-DUSE_CUDA",
     "-DUSE_CUDNN",
     "-DPYTORCH_C10_DRIVER_API_SUPPORTED",
@@ -735,7 +737,6 @@ TORCH_COPTS = COMMON_COPTS + [
     "-fno-math-errno ",
     "-fno-trapping-math",
     "-Wno-error=unused-function",
-    "-Wno-error=unused-private-field",
 ]
 
 torch_sources = {
